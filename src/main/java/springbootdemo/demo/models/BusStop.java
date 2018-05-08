@@ -1,5 +1,7 @@
 package springbootdemo.demo.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,15 +11,19 @@ public class BusStop {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonSerialize
     private Integer id;
 
-    @Column(name = "x_coordinate")
-    private String coordinateX;
+    @Column(name = "longitude")
+    @JsonSerialize
+    private String longitude;
 
-    @Column(name = "y_coordinate")
-    private String coordinateY;
+    @Column(name = "latitude")
+    @JsonSerialize
+    private String latitude;
 
     @Column(name = "name")
+    @JsonSerialize
     private String name;
 
     public Integer getId() {
@@ -26,22 +32,6 @@ public class BusStop {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getCoordinateX() {
-        return coordinateX;
-    }
-
-    public void setCoordinateX(String coordinateX) {
-        this.coordinateX = coordinateX;
-    }
-
-    public String getCoordinateY() {
-        return coordinateY;
-    }
-
-    public void setCoordinateY(String coordinateY) {
-        this.coordinateY = coordinateY;
     }
 
     public String getName() {

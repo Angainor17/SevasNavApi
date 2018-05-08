@@ -14,6 +14,13 @@ public class Route {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "transport_type")
+    private String transportType;
+
+    public String getTransportType() {
+        return transportType;
+    }
+
     public Integer getId() {
         return id;
     }
