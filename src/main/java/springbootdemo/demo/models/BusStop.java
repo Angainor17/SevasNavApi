@@ -1,6 +1,8 @@
 package springbootdemo.demo.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import springbootdemo.demo.locationBusiness.coordinates.DistanceCalculator;
+import springbootdemo.demo.locationBusiness.model.UncheckedUserLocation;
 
 import javax.persistence.*;
 
@@ -40,5 +42,31 @@ public class BusStop {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    private Double getLongitude() {
+        return Double.parseDouble(longitude);
+    }
+
+    private Double getLatitude() {
+        return Double.parseDouble(latitude);
+    }
+
+    public double distanceTo(Location location) {
+        return DistanceCalculator.distance(
+                getLatitude(),
+                getLongitude(),
+                location.getLatitude(),
+                location.getLongitude()
+        );
+    }
+
+    public double distanceTo(UncheckedUserLocation location) {
+        return DistanceCalculator.distance(
+                getLatitude(),
+                getLongitude(),
+                location.getLatitude(),
+                location.getLongitude()
+        );
     }
 }

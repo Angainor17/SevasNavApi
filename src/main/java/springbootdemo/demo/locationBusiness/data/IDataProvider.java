@@ -1,25 +1,32 @@
 package springbootdemo.demo.locationBusiness.data;
 
 import springbootdemo.demo.models.BusStop;
+import springbootdemo.demo.models.Location;
 import springbootdemo.demo.models.Route;
 
 import java.util.ArrayList;
 
 public interface IDataProvider {
 
-    void addBusStopToEnd(int userId, BusStop busStop, int position);
+    void addBusStopToEnd(String userId, BusStop busStop);
 
-    void removeBusStop(int userId, BusStop busStop);
+    void addLocation(Location location);
 
-    void addRoute(int userId, Route route);
+    void removeBusStop(String userId, BusStop busStop);
 
-    void removeRoute(int userId, Route route);
+    void addRoute(String userId, Route route);
 
-    ArrayList<Route> getRoutes(int userId);
+    void removeRoute(String userId, Route route);
 
-    ArrayList<Route> getBusStopList(int userId);
+    boolean hasLocationWithUserId(String userId);
+
+    ArrayList<Route> getRoutes(String userId);
+
+    ArrayList<BusStop> getBusStopList(String userId);
+
+    ArrayList<BusStop> getRouteBusStop(Route route);
 
     ArrayList<Route> getAllRoutes();
 
-    ArrayList<Route> getAllBusStop();
+    ArrayList<BusStop> getAllBusStop();
 }

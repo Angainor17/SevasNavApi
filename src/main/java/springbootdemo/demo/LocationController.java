@@ -22,11 +22,8 @@ public class LocationController {
     @Autowired
     private LocationRepository locationRepository;
 
+    @Autowired
     private UsersLocationManager locationManager;
-
-    public LocationController() {
-        locationManager = new UsersLocationManager();
-    }
 
     @RequestMapping(value = "/getMap", method = RequestMethod.GET)
     @ResponseBody

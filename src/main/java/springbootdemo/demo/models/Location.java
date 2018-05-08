@@ -1,9 +1,9 @@
 package springbootdemo.demo.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import springbootdemo.demo.locationBusiness.model.UncheckedUserLocation;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Set;
 
 @Entity
@@ -50,4 +50,37 @@ public class Location {
     @JsonSerialize
     private Set<Route> routes;
 
+    public Location() {
+    }
+
+    public Location(UncheckedUserLocation userLocation) {
+        this.latitude = userLocation.getLatitudeString();
+        this.longitude = userLocation.getLongitudeString();
+        this.time = "" + userLocation.getTime().getTimeInMillis();
+        this.userId = userLocation.getUserId();
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public Set<BusStop> getBusStops() {
+        return busStops;
+    }
+
+    public Set<Route> getRoutes() {
+        return routes;
+    }
+
+    public double getLatitude() {
+        return Double.parseDouble(latitude);
+    }
+
+    public double getLongitude() {
+        return Double.parseDouble(longitude);
+    }
 }

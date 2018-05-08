@@ -45,4 +45,8 @@ public class RouteBusStops {
     public Integer getRouteId() {
         return routeId;
     }
+
+    public BusStop getBusStop() {
+        return busStop;
+    }
 }

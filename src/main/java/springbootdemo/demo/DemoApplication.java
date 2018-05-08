@@ -2,11 +2,14 @@ package springbootdemo.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import springbootdemo.demo.models.BusStop;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Controller;
 
 @SpringBootApplication
+@EnableJpaRepositories
+@Configuration
+@Controller
 public class DemoApplication {
 
     public static void main(String[] args) {

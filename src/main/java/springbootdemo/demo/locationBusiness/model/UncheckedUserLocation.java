@@ -18,11 +18,19 @@ public class UncheckedUserLocation {
     @JsonSerialize
     private String time;
 
-    public String getLongitude() {
+    public Double getLongitude() {
+        return Double.parseDouble(longitude);
+    }
+
+    public Double getLatitude() {
+        return Double.parseDouble(latitude);
+    }
+
+    public String getLongitudeString() {
         return longitude;
     }
 
-    public String getLatitude() {
+    public String getLatitudeString() {
         return latitude;
     }
 
