@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @Service
 public class CoordinateManager implements ICoordinateManager {
 
-    private final float MATCH_RADIUS = 100f;
+    private final float MATCH_RADIUS = 50f;
 
     @Autowired
     IDataProvider dataProvider;

@@ -1,18 +1,20 @@
 package springbootdemo.demo.locationBusiness.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
-import springbootdemo.demo.locationBusiness.data.IDataProvider;
+import springbootdemo.demo.locationBusiness.model.UncheckedUserLocation;
 import springbootdemo.demo.models.*;
+import springbootdemo.demo.repositories.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 @Service
 public class DataProvider implements IDataProvider {
+
+    private static ArrayList<BusStop> allBusStops;
+    private static ArrayList<Route> allRoutes;
+    private static HashMap<Route, ArrayList<BusStop>> routeBusStops;
 
     @Autowired
     public LocationRepository locationRepository;
@@ -38,7 +40,22 @@ public class DataProvider implements IDataProvider {
     }
 
     @Override
+    public Location getLocation(String userId) {
+        return locationRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Location updateLocation(UncheckedUserLocation uncheckedUserLocation) {
+        Location location = getLocation(uncheckedUserLocation.getUserId());
+        location.update(uncheckedUserLocation);
+        locationRepository.save(location);
+
+        return location;
+    }
+
+    @Override
     public void addLocation(Location location) {
+        location.setFirstTime("" + location.getTime());
         locationRepository.save(location);
     }
 
@@ -60,8 +77,12 @@ public class DataProvider implements IDataProvider {
     @Override
     public void removeBusStop(String userId, BusStop busStop) {
         Location location = locationRepository.findByUserId(userId);
-        if (location != null) {
-            locationRepository.delete(location);
+        ArrayList<LocationBusStop> locationBusStop = locationBusStopRepository.findByLocationIdAndBusStopIds(
+                location.getId(),
+                busStop.getId()
+        );
+        if (!locationBusStop.isEmpty()) {
+            locationBusStopRepository.delete(locationBusStop.get(0));
         }
     }
 
@@ -86,40 +107,112 @@ public class DataProvider implements IDataProvider {
         );
 
         if (locationRoute != null) {
-            locationRouteRepository.save(locationRoute);
+            locationRouteRepository.delete(locationRoute);
         }
     }
 
     @Override
     public ArrayList<Route> getRoutes(String userId) {
-        return new ArrayList<>(locationRepository.findByUserId(userId).getRoutes());
+        Location location = locationRepository.findByUserId(userId);
+
+        if (location != null) {
+            Set<Route> routeSet = location.getRoutes();
+            if (routeSet != null) {
+                return new ArrayList<>(routeSet);
+            }
+        }
+        return new ArrayList<>();
     }
 
     @Override
     public ArrayList<BusStop> getBusStopList(String userId) {
-        return new ArrayList<>(locationRepository.findByUserId(userId).getBusStops());
+        Location location = locationRepository.findByUserId(userId);
+
+        if (location == null) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<LocationBusStop> busStopOrder = locationBusStopRepository.findByLocationId(location.getId());
+
+        if (busStopOrder != null) {
+
+            busStopOrder.sort(Comparator.comparing(LocationBusStop::getPosition));
+
+            ArrayList<BusStop> result = new ArrayList<>();
+
+            for (LocationBusStop locationBusStop : busStopOrder) {
+                BusStop busStop = busStopRepository.findById(locationBusStop.getBusStopID());
+                result.add(busStop);
+            }
+            return result;
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void updateLocation(Location location) {
+        locationRepository.save(location);
+    }
+
+    @Override
+    public void removeLocation(String userId) {
+        Location location = locationRepository.findByUserId(userId);
+        if (location != null) {
+            locationRepository.delete(location);
+        }
     }
 
     @Override
     public ArrayList<Route> getAllRoutes() {
-        return (ArrayList<Route>) routesRepository.findAll();
+        if (allRoutes == null) {
+            allRoutes = (ArrayList<Route>) routesRepository.findAll();
+        }
+        return allRoutes;
     }
 
     @Override
     public ArrayList<BusStop> getRouteBusStop(Route route) {
-        List<RouteBusStops> routeBusStops = routeBusStopRepository.findRouteBusStopsByRouteId(route.getId());
-        ArrayList<BusStop> result = new ArrayList<>();
+        return getRoutesWithBusStops().get(getRoute(route));
+    }
 
-        for (RouteBusStops routeBusStop : routeBusStops) {
-            BusStop newBusStop = routeBusStop.getBusStop();
-            result.add(newBusStop);
+    @Override
+    public HashMap<Route, ArrayList<BusStop>> getRoutesWithBusStops() {
+        if (routeBusStops == null) {
+            routeBusStops = new HashMap<>();
+
+            for (Route route1 : getAllRoutes()) {
+                List<RouteBusStops> routeBusStop = routeBusStopRepository.findRouteBusStopsByRouteId(route1.getId());
+                routeBusStop.sort(Comparator.comparing(RouteBusStops::getPosition));//check!!!
+
+                ArrayList<BusStop> result = new ArrayList<>();
+
+                for (RouteBusStops routeBusStopItem : routeBusStop) {
+                    result.add(routeBusStopItem.getBusStop());
+                }
+
+                routeBusStops.put(route1, result);
+            }
         }
 
-        return result;
+        return routeBusStops;
+    }
+
+    private Route getRoute(Route route) {
+        ArrayList<Route> routes = getAllRoutes();
+
+        for (Route routeFromList : routes) {
+            if (routeFromList.getId().equals(route.getId())) {
+                return routeFromList;
+            }
+        }
+        return null;
     }
 
     @Override
     public ArrayList<BusStop> getAllBusStop() {
-        return (ArrayList<BusStop>) busStopRepository.findAll();
+        if (allBusStops == null) {
+            allBusStops = (ArrayList<BusStop>) busStopRepository.findAll();
+        }
+        return allBusStops;
     }
 }

@@ -49,4 +49,16 @@ public class RouteBusStops {
     public BusStop getBusStop() {
         return busStop;
     }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public void setBusStopId(Integer busStopId) {
+        this.busStopId = busStopId;
+    }
+
+    public void setRouteId(Integer routeId) {
+        this.routeId = routeId;
+    }
 }

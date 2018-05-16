@@ -44,12 +44,21 @@ public class BusStop {
         this.name = name;
     }
 
-    private Double getLongitude() {
+    public Double getLongitude() {
         return Double.parseDouble(longitude);
     }
 
-    private Double getLatitude() {
+    public Double getLatitude() {
         return Double.parseDouble(latitude);
+    }
+
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
     public double distanceTo(Location location) {
@@ -59,6 +68,19 @@ public class BusStop {
                 location.getLatitude(),
                 location.getLongitude()
         );
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof BusStop) {
+            BusStop newBusStop = (BusStop) obj;
+            boolean equalName = getName().equals(newBusStop.getName());
+            boolean equalLatitude = latitude.equals(newBusStop.latitude);
+            boolean equalLongitude = longitude.equals(newBusStop.longitude);
+
+            return equalName && equalLatitude && equalLongitude;
+        }
+        return false;
     }
 
     public double distanceTo(UncheckedUserLocation location) {

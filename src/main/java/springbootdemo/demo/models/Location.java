@@ -28,9 +28,17 @@ public class Location {
     @JsonSerialize
     private String userId;
 
+    @Column(name = "first_time")
+    @JsonSerialize
+    private String firstTime;
+
     @Column(name = "time")
     @JsonSerialize
     private String time;
+
+    @Column(name = "is_visible")
+    @JsonSerialize
+    private Boolean isVisisble;
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -60,6 +68,30 @@ public class Location {
         this.userId = userLocation.getUserId();
     }
 
+    public long getTime() {
+        return Long.parseLong(time);
+    }
+
+    public String getFirstTimeString() {
+        return firstTime;
+    }
+
+    public long getFirstTime() {
+        return Long.parseLong(firstTime);
+    }
+
+    public void setFirstTime(String firstTime) {
+        this.firstTime = firstTime;
+    }
+
+    public Boolean getVisisble() {
+        return isVisisble;
+    }
+
+    public void setVisible(Boolean isVisible) {
+        this.isVisisble = isVisible;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -80,7 +112,21 @@ public class Location {
         return Double.parseDouble(latitude);
     }
 
+    public String getLongitudeString() {
+        return (longitude);
+    }
+
+    public String getLatitudeString() {
+        return (latitude);
+    }
+
     public double getLongitude() {
         return Double.parseDouble(longitude);
+    }
+
+    public void update(UncheckedUserLocation uncheckedUserLocation) {
+        this.longitude = uncheckedUserLocation.getLongitudeString();
+        this.latitude = uncheckedUserLocation.getLatitudeString();
+        this.time = "" + uncheckedUserLocation.getTime().getTimeInMillis();
     }
 }

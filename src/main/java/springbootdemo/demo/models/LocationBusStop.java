@@ -16,7 +16,7 @@ public class LocationBusStop {
     private Integer locationId;
 
     @Column(name = "bus_stop_ids")
-    private Integer busStop;
+    private Integer busStopIds;
 
     @Column(name = "position")
     private Integer position;
@@ -26,7 +26,15 @@ public class LocationBusStop {
     }
 
     public void setBusStop(Integer busStop) {
-        this.busStop = busStop;
+        this.busStopIds = busStop;
+    }
+
+    public Integer getBusStopID() {
+        return busStopIds;
+    }
+
+    public Integer getPosition() {
+        return position;
     }
 
     public void setPosition(Integer position) {

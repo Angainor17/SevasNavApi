@@ -1,4 +1,4 @@
-package springbootdemo.demo;
+package springbootdemo.demo.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import springbootdemo.demo.models.*;
+import springbootdemo.demo.repositories.BusStopRepository;
+import springbootdemo.demo.repositories.RouteBusStopRepository;
+import springbootdemo.demo.repositories.RoutesRepository;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,7 +34,7 @@ public class RouteController {
         ObjectMapper objectMapper = new ObjectMapper();
         Iterable<Route> routes = routesRepository.findAll();
         try {
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(routes);
+            return objectMapper.writeValueAsString(routes);
         } catch (JsonProcessingException e) {
             return "[]";
         }
