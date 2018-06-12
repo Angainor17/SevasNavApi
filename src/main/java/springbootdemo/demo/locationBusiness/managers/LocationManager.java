@@ -33,18 +33,6 @@ public class LocationManager {
         checkAwayFromRoute();//TODO
     }
 
-    private void checkAwayFromRoute() {
-        //TODO
-    }
-
-    private void checkOutOfBus() {
-        //TODO
-    }
-
-    private void checkWaitForBus() {
-        //TODO
-    }
-
     public void removeUselessLocation(Location location) {
         ArrayList<Route> routes = dataProvider.getRoutes(location.getUserId());
         int routesCount = 0;
@@ -55,6 +43,18 @@ public class LocationManager {
         if (routesCount == 0 && isTooOld(location)) {
 //            dataProvider.removeLocation(location.getUserId());
         }
+    }
+
+    private void checkAwayFromRoute() {
+        //TODO
+    }
+
+    private void checkOutOfBus() {
+        //TODO
+    }
+
+    private void checkWaitForBus() {
+        //TODO
     }
 
     private boolean isTooOld(Location location) {

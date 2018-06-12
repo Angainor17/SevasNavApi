@@ -65,7 +65,7 @@ public class DirectionsService {
         ArrayList<RouteDirection> routeDirections = routeDirectionRepository.findRouteDirectionByRouteId(routeId);
         routeDirections.sort(Comparator.comparing(RouteDirection::getPosition));
 
-        int lastBusStop = getLastBusStopIndex(routeId);
+        int lastBusStop = getLastBusStopIndex(routeId,new ArrayList<>());//fix
         Direction[] directions = new Direction[lastBusStop];
 
         for (int i = 0; i < lastBusStop; i++) {
@@ -80,15 +80,15 @@ public class DirectionsService {
         Route route = routesRepository.findById(routeId).get(0);
         ArrayList<BusStop> busStops = dataProvider.getRouteBusStop(route);
 
-        if(busStops.get(0).equals())
-
-        {
-
-
-        }
+//        if(busStops.get(0).equals())
+//
+//        {
+//
+//
+//        }
         for (int i = 0; i < routeDirections.size(); i++) {
         }
-
-        return busStops.get(0).equals(busStops.get(busStops.size() - 1));
+return 0;
+//        return busStops.get(0).equals(busStops.get(busStops.size() - 1));
     }
 }
